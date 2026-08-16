@@ -1,0 +1,1795 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A drop-in Claude Code config turns one session into a disciplined team: one manager, twelve specialist agents, hard role separation, and cost-tiered models.">
+  <meta name="keywords" content="Claude Code, AI agents, multi-agent, orchestration, software engineering, Anthropic">
+  <meta name="author" content="Milad Roknadini">
+  <meta name="theme-color" content="#08080c">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://miladjs.github.io/claude-crew/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Claude Crew">
+  <meta property="og:title" content="Claude Crew — a software engineering company inside Claude Code">
+  <meta property="og:description" content="A drop-in Claude Code config turns one session into a disciplined team: one manager, twelve specialist agents, hard role separation, and cost-tiered models.">
+  <meta property="og:url" content="https://miladjs.github.io/claude-crew/">
+  <meta property="og:image" content="https://miladjs.github.io/claude-crew/assets/claude-crew-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Claude Crew engineering team with one manager and twelve specialist agents">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Claude Crew — a software engineering company inside Claude Code">
+  <meta name="twitter:description" content="A drop-in Claude Code config turns one session into a disciplined team: one manager, twelve specialist agents, hard role separation, and cost-tiered models.">
+  <meta name="twitter:image" content="https://miladjs.github.io/claude-crew/assets/claude-crew-cover.png">
+  <title>Claude Crew — a software engineering company inside Claude Code</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@33.003/Vazirmatn-font-face.css">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #08080c;
+      --bg-deep: #0b0b14;
+      --surface: #111119;
+      --surface-raised: #151520;
+      --surface-soft: rgba(17, 17, 25, 0.72);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(139, 108, 255, 0.32);
+      --primary: #6c47ff;
+      --primary-light: #8b6cff;
+      --blue: #3b82f6;
+      --blue-deep: #1f6feb;
+      --cyan: #22d3ee;
+      --green: #2ea043;
+      --orange: #f0883e;
+      --text: #ececf3;
+      --heading: #ffffff;
+      --muted: #9a9ab0;
+      --muted-strong: #b8b8ca;
+      --radius: 16px;
+      --radius-sm: 12px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
+      --glow: 0 0 42px rgba(108, 71, 255, 0.25);
+      --container: 1180px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-block-start: 100px;
+      background: var(--bg);
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html[dir="rtl"] {
+      font-family: "Vazirmatn", Tahoma, Arial, sans-serif;
+    }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 78% 6%, rgba(59, 130, 246, 0.08), transparent 25rem),
+        radial-gradient(circle at 18% 17%, rgba(108, 71, 255, 0.1), transparent 28rem),
+        linear-gradient(180deg, var(--bg-deep) 0%, var(--bg) 32%, #09090e 100%);
+      color: var(--text);
+      line-height: 1.65;
+      text-align: start;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      position: fixed;
+      z-index: -1;
+      inset: 0;
+      background-image: radial-gradient(rgba(139, 108, 255, 0.16) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.32), transparent 48%);
+      content: "";
+      pointer-events: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    code,
+    pre,
+    .mono,
+    .latin {
+      direction: ltr;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      unicode-bidi: isolate;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(139, 108, 255, 0.9);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 1000;
+      inset-block-start: 12px;
+      inset-inline-start: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--heading);
+      color: var(--bg);
+      font-weight: 700;
+      transform: translateY(-180%);
+      transition: transform 160ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .container {
+      width: min(calc(100% - 40px), var(--container));
+      margin-inline: auto;
+    }
+
+    .section {
+      padding-block: 104px;
+    }
+
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-block-end: 14px;
+      color: var(--primary-light);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .section-kicker::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: currentColor;
+      box-shadow: 0 0 14px currentColor;
+      content: "";
+    }
+
+    html[dir="rtl"] .section-kicker {
+      letter-spacing: 0;
+    }
+
+    .section-heading {
+      max-width: 760px;
+      margin: 0;
+      color: var(--heading);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+    }
+
+    html[dir="rtl"] .section-heading,
+    html[dir="rtl"] .hero h1 {
+      letter-spacing: -0.02em;
+    }
+
+    .section-copy {
+      max-width: 700px;
+      margin-block: 18px 0;
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    .site-header {
+      position: sticky;
+      z-index: 100;
+      inset-block-start: 0;
+      border-block-end: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(8, 8, 12, 0.74);
+      backdrop-filter: blur(18px) saturate(150%);
+    }
+
+    .header-inner {
+      display: flex;
+      min-height: 76px;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .brand {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 10px;
+      color: var(--heading);
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      border: 1px solid rgba(139, 108, 255, 0.5);
+      border-radius: 10px;
+      background: linear-gradient(145deg, rgba(139, 108, 255, 0.3), rgba(108, 71, 255, 0.08));
+      color: var(--heading);
+      box-shadow: 0 0 22px rgba(108, 71, 255, 0.3);
+    }
+
+    .brand-mark svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .nav-links {
+      display: flex;
+      margin-inline: auto;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-links a {
+      padding: 8px 10px;
+      border-radius: 9px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: background 160ms ease, color 160ms ease;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--heading);
+    }
+
+    .header-actions {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .language-toggle,
+    .header-github {
+      display: inline-flex;
+      min-height: 40px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.035);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 700;
+      transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+    }
+
+    .language-toggle {
+      gap: 5px;
+      padding-inline: 11px;
+    }
+
+    .language-toggle:hover,
+    .header-github:hover {
+      border-color: rgba(139, 108, 255, 0.52);
+      background: rgba(108, 71, 255, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .language-option {
+      color: #66667a;
+      transition: color 160ms ease;
+    }
+
+    html[lang="en"] .language-option[data-language="en"],
+    html[lang="fa"] .language-option[data-language="fa"] {
+      color: var(--heading);
+    }
+
+    .header-github {
+      gap: 7px;
+      padding-inline: 13px;
+    }
+
+    .header-github svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .hero {
+      position: relative;
+      padding-block: 96px 70px;
+    }
+
+    .hero-grid {
+      display: grid;
+      align-items: center;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      max-width: 920px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-block-end: 20px;
+      padding: 6px 11px;
+      border: 1px solid rgba(139, 108, 255, 0.28);
+      border-radius: 999px;
+      background: rgba(108, 71, 255, 0.08);
+      color: #c9baff;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--primary-light);
+      box-shadow: 0 0 12px var(--primary-light);
+    }
+
+    .hero h1 {
+      margin: 0;
+      background: linear-gradient(100deg, #ffffff 12%, #ffffff 42%, #a48cff 72%, #6c47ff 100%);
+      background-clip: text;
+      color: transparent;
+      font-size: clamp(3.6rem, 8.5vw, 7.4rem);
+      font-weight: 800;
+      letter-spacing: -0.075em;
+      line-height: 0.92;
+    }
+
+    .hero-tagline {
+      max-width: 680px;
+      margin-block: 28px 0;
+      color: var(--heading);
+      font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+      font-weight: 600;
+      line-height: 1.42;
+    }
+
+    .hero-subtext {
+      max-width: 650px;
+      margin-block: 17px 0;
+      color: var(--muted);
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-block-start: 32px;
+    }
+
+    @keyframes hero-entrance {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes spark-glow {
+      0%, 100% {
+        box-shadow: 0 0 22px rgba(108, 71, 255, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 28px rgba(108, 71, 255, 0.42);
+      }
+    }
+
+    .hero-copy > * {
+      animation: hero-entrance 560ms ease-out both;
+    }
+
+    .hero-copy > :nth-child(2) {
+      animation-delay: 80ms;
+    }
+
+    .hero-copy > :nth-child(3) {
+      animation-delay: 160ms;
+    }
+
+    .hero-copy > :nth-child(4) {
+      animation-delay: 240ms;
+    }
+
+    .hero-copy > :nth-child(5) {
+      animation-delay: 320ms;
+    }
+
+    .brand-mark {
+      animation: spark-glow 4s ease-in-out infinite;
+    }
+
+    .reveal-ready {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 520ms ease, transform 520ms ease;
+    }
+
+    .reveal-ready.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 49px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding-inline: 19px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      color: var(--heading);
+      box-shadow: 0 10px 30px rgba(108, 71, 255, 0.32), inset 0 1px rgba(255, 255, 255, 0.22);
+    }
+
+    .button-primary:hover {
+      box-shadow: 0 15px 38px rgba(108, 71, 255, 0.42), inset 0 1px rgba(255, 255, 255, 0.22);
+    }
+
+    .button-secondary {
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.035);
+      color: var(--text);
+    }
+
+    .button-secondary:hover {
+      border-color: rgba(139, 108, 255, 0.38);
+      background: rgba(108, 71, 255, 0.08);
+    }
+
+    .button svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    html[dir="rtl"] .button-primary svg {
+      transform: scaleX(-1);
+    }
+
+    .hero-stats {
+      display: grid;
+      margin-block-start: 58px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(17, 17, 25, 0.58);
+      grid-template-columns: repeat(3, 1fr);
+      backdrop-filter: blur(12px);
+    }
+
+    .stat {
+      padding: 19px 22px;
+      text-align: center;
+    }
+
+    .stat + .stat {
+      border-inline-start: 1px solid var(--border);
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--heading);
+      font-size: 1.08rem;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .overview {
+      border-block: 1px solid rgba(255, 255, 255, 0.045);
+      background: rgba(255, 255, 255, 0.012);
+    }
+
+    .feature-grid {
+      display: grid;
+      gap: 16px;
+      margin-block-start: 42px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .feature-card,
+    .crew-card {
+      border: 1px solid var(--border);
+      background: linear-gradient(145deg, rgba(21, 21, 32, 0.88), rgba(17, 17, 25, 0.7));
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
+      transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .feature-card:hover,
+    .crew-card:hover {
+      border-color: rgba(139, 108, 255, 0.3);
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.2), 0 0 30px rgba(108, 71, 255, 0.06);
+      transform: translateY(-3px);
+    }
+
+    .feature-card {
+      min-height: 225px;
+      padding: 25px;
+      border-radius: var(--radius);
+    }
+
+    .feature-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      margin-block-end: 28px;
+      place-items: center;
+      border: 1px solid rgba(139, 108, 255, 0.24);
+      border-radius: 12px;
+      background: rgba(108, 71, 255, 0.08);
+      color: var(--primary-light);
+    }
+
+    .feature-card:nth-child(2) .feature-icon {
+      border-color: rgba(59, 130, 246, 0.25);
+      background: rgba(59, 130, 246, 0.08);
+      color: var(--blue);
+    }
+
+    .feature-card:nth-child(3) .feature-icon {
+      border-color: rgba(34, 211, 238, 0.22);
+      background: rgba(34, 211, 238, 0.07);
+      color: var(--cyan);
+    }
+
+    .feature-card:nth-child(4) .feature-icon {
+      border-color: rgba(46, 160, 67, 0.24);
+      background: rgba(46, 160, 67, 0.08);
+      color: #56d364;
+    }
+
+    .feature-icon svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .feature-card h3 {
+      margin: 0;
+      color: var(--heading);
+      font-size: 1.05rem;
+    }
+
+    .feature-card p {
+      margin-block: 10px 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .customize-section {
+      position: relative;
+      padding-block: 112px;
+      overflow: hidden;
+    }
+
+    .customize-section::before {
+      position: absolute;
+      inset: 8% 0;
+      border-block: 1px solid rgba(139, 108, 255, 0.1);
+      background:
+        linear-gradient(110deg, rgba(108, 71, 255, 0.095), rgba(59, 130, 246, 0.025) 48%, rgba(108, 71, 255, 0.065));
+      content: "";
+    }
+
+    .customize-panel {
+      position: relative;
+      display: grid;
+      gap: clamp(38px, 6vw, 74px);
+      padding: clamp(30px, 5vw, 58px);
+      overflow: hidden;
+      border: 1px solid var(--border-strong);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(108, 71, 255, 0.15), transparent 19rem),
+        linear-gradient(145deg, rgba(18, 16, 31, 0.98), rgba(12, 12, 19, 0.96));
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.32), 0 0 70px rgba(108, 71, 255, 0.1);
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    }
+
+    .customize-panel::after {
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      inset-block-end: -160px;
+      inset-inline-end: -80px;
+      border: 1px dashed rgba(139, 108, 255, 0.22);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .customize-copy {
+      position: relative;
+      z-index: 1;
+    }
+
+    .customize-copy .section-heading {
+      font-size: clamp(2.3rem, 5vw, 4rem);
+    }
+
+    .path-chip {
+      display: inline-flex;
+      max-width: 100%;
+      margin-block-start: 26px;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1px solid rgba(139, 108, 255, 0.38);
+      border-radius: 10px;
+      background: rgba(108, 71, 255, 0.1);
+      color: #d8ceff;
+      box-shadow: 0 0 26px rgba(108, 71, 255, 0.12);
+      font-size: clamp(0.74rem, 2.4vw, 0.88rem);
+      overflow-wrap: anywhere;
+    }
+
+    .path-chip svg {
+      flex: 0 0 auto;
+      width: 17px;
+      height: 17px;
+      color: var(--primary-light);
+    }
+
+    .customize-note {
+      margin-block: 24px 0;
+      padding-block: 13px;
+      padding-inline: 16px;
+      border-inline-start: 2px solid var(--primary-light);
+      background: rgba(255, 255, 255, 0.025);
+      color: var(--muted-strong);
+      font-size: 0.9rem;
+    }
+
+    .customize-note strong {
+      color: var(--heading);
+    }
+
+    .controls-list {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      margin: 0;
+      padding: 0;
+      gap: 11px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      list-style: none;
+    }
+
+    .controls-list li {
+      display: flex;
+      min-height: 66px;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.025);
+      color: var(--muted-strong);
+      font-size: 0.88rem;
+    }
+
+    .check-dot {
+      display: grid;
+      flex: 0 0 auto;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(108, 71, 255, 0.16);
+      color: #b8a7ff;
+    }
+
+    .check-dot svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .default-stack {
+      grid-column: 1 / -1;
+      border-color: rgba(46, 160, 67, 0.24) !important;
+      background: rgba(46, 160, 67, 0.055) !important;
+    }
+
+    .default-stack .check-dot {
+      background: rgba(46, 160, 67, 0.17);
+      color: #56d364;
+    }
+
+    .docs-section {
+      border-block: 1px solid rgba(255, 255, 255, 0.045);
+      background: rgba(255, 255, 255, 0.012);
+    }
+
+    .docs-grid {
+      display: grid;
+      align-items: start;
+      gap: 22px;
+      margin-block-start: 43px;
+      grid-template-columns: minmax(0, 1.15fr) minmax(380px, 0.85fr);
+    }
+
+    .doc-panel {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(17, 17, 25, 0.74);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.16);
+    }
+
+    .doc-panel-heading {
+      display: flex;
+      min-height: 60px;
+      margin: 0;
+      align-items: center;
+      gap: 10px;
+      padding-inline: 20px;
+      border-block-end: 1px solid var(--border);
+      color: var(--heading);
+      font-size: 0.95rem;
+    }
+
+    .panel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--primary-light);
+      box-shadow: 0 0 12px rgba(139, 108, 255, 0.7);
+    }
+
+    .workflow-list {
+      display: grid;
+      margin: 0;
+      padding: 10px;
+      gap: 7px;
+      list-style: none;
+    }
+
+    .workflow-row {
+      display: grid;
+      min-height: 76px;
+      align-items: center;
+      gap: 16px;
+      padding: 14px;
+      border-radius: 11px;
+      background: rgba(255, 255, 255, 0.022);
+      grid-template-columns: 90px minmax(0, 1fr);
+    }
+
+    .workflow-label {
+      color: var(--primary-light);
+      font-size: 0.77rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .workflow-row:nth-child(2) .workflow-label {
+      color: var(--blue);
+    }
+
+    .workflow-row:nth-child(3) .workflow-label {
+      color: var(--orange);
+    }
+
+    .workflow-row:nth-child(4) .workflow-label {
+      color: #56d364;
+    }
+
+    .workflow-chain {
+      overflow-x: auto;
+      color: #d1d1df;
+      font-size: 0.76rem;
+      line-height: 1.7;
+      white-space: nowrap;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    .model-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    .model-table th,
+    .model-table td {
+      padding: 15px 17px;
+      border-block-end: 1px solid var(--border);
+      text-align: start;
+      vertical-align: top;
+    }
+
+    .model-table tr:last-child td {
+      border-block-end: 0;
+    }
+
+    .model-table th {
+      color: var(--muted);
+      font-size: 0.69rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    html[dir="rtl"] .model-table th {
+      letter-spacing: 0;
+    }
+
+    .role-badge {
+      display: inline-flex;
+      padding: 3px 8px;
+      border: 1px solid rgba(139, 108, 255, 0.26);
+      border-radius: 999px;
+      background: rgba(108, 71, 255, 0.08);
+      color: #c4b5ff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .model-id {
+      display: block;
+      margin-block-start: 5px;
+      color: #73738a;
+      font-size: 0.68rem;
+      white-space: nowrap;
+    }
+
+    .model-use {
+      color: var(--muted-strong);
+      line-height: 1.6;
+    }
+
+    .crew-grid {
+      display: grid;
+      gap: 14px;
+      margin-block-start: 44px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .crew-card {
+      min-height: 188px;
+      padding: 21px;
+      border-radius: 14px;
+    }
+
+    .crew-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .agent-name {
+      color: var(--heading);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .crew-card p {
+      margin-block: 31px 0;
+      color: var(--muted);
+      font-size: 0.83rem;
+      line-height: 1.7;
+    }
+
+    .crew-card[data-role="analyst"] .role-badge {
+      border-color: rgba(59, 130, 246, 0.26);
+      background: rgba(59, 130, 246, 0.08);
+      color: #89b4ff;
+    }
+
+    .crew-card[data-role="lead"] .role-badge {
+      border-color: rgba(240, 136, 62, 0.28);
+      background: rgba(240, 136, 62, 0.08);
+      color: #ffb37c;
+    }
+
+    .crew-card[data-role="assistant"] .role-badge {
+      border-color: rgba(46, 160, 67, 0.28);
+      background: rgba(46, 160, 67, 0.08);
+      color: #6fdf7b;
+    }
+
+    .install-section {
+      border-block-start: 1px solid rgba(255, 255, 255, 0.045);
+      background:
+        radial-gradient(circle at 50% 100%, rgba(108, 71, 255, 0.09), transparent 30rem),
+        rgba(255, 255, 255, 0.012);
+    }
+
+    .install-shell {
+      margin-block-start: 42px;
+      overflow: hidden;
+      border: 1px solid var(--border-strong);
+      border-radius: 18px;
+      background: #0b0b11;
+      box-shadow: var(--shadow), 0 0 50px rgba(108, 71, 255, 0.08);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      padding: 9px;
+      border-block-end: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.025);
+      overflow-x: auto;
+    }
+
+    .tab-button {
+      min-width: 94px;
+      padding: 9px 14px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: color 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    .tab-button:hover {
+      color: var(--heading);
+    }
+
+    .tab-button[aria-selected="true"] {
+      border-color: rgba(139, 108, 255, 0.26);
+      background: rgba(108, 71, 255, 0.11);
+      color: var(--heading);
+    }
+
+    .code-panel {
+      position: relative;
+    }
+
+    .code-toolbar {
+      display: flex;
+      min-height: 50px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding-inline: 18px;
+      border-block-end: 1px solid rgba(255, 255, 255, 0.05);
+      color: #6f6f83;
+      font-size: 0.71rem;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .window-dots span {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #31313d;
+    }
+
+    .window-dots span:first-child {
+      background: var(--orange);
+    }
+
+    .window-dots span:nth-child(2) {
+      background: #d7b339;
+    }
+
+    .window-dots span:last-child {
+      background: var(--green);
+    }
+
+    .copy-button {
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted-strong);
+      cursor: pointer;
+      font-size: 0.7rem;
+      font-weight: 700;
+      transition: border-color 160ms ease, color 160ms ease;
+    }
+
+    .copy-button:hover {
+      border-color: rgba(139, 108, 255, 0.4);
+      color: var(--heading);
+    }
+
+    .code-panel pre {
+      margin: 0;
+      padding: 26px;
+      overflow-x: auto;
+      color: #d8d8e5;
+      font-size: clamp(0.72rem, 2vw, 0.84rem);
+      line-height: 1.9;
+      text-align: start;
+      white-space: pre;
+    }
+
+    .install-notes {
+      display: grid;
+      gap: 11px;
+      margin: 0;
+      padding: 21px 24px;
+      border-block-start: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.018);
+      color: var(--muted);
+      font-size: 0.86rem;
+      list-style: none;
+    }
+
+    .install-notes li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .note-mark {
+      flex: 0 0 auto;
+      width: 7px;
+      height: 7px;
+      margin-block-start: 8px;
+      border-radius: 999px;
+      background: var(--primary-light);
+      box-shadow: 0 0 10px rgba(139, 108, 255, 0.55);
+    }
+
+    .inline-code {
+      display: inline;
+      padding: 2px 5px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.055);
+      color: #cfc4ff;
+      font-size: 0.82em;
+      overflow-wrap: anywhere;
+    }
+
+    .site-footer {
+      border-block-start: 1px solid var(--border);
+      background: rgba(5, 5, 8, 0.6);
+    }
+
+    .footer-inner {
+      display: flex;
+      min-height: 112px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 18px;
+    }
+
+    .footer-links a {
+      color: var(--muted-strong);
+      transition: color 160ms ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-light);
+    }
+
+    .footer-credit a {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    @media (max-width: 1060px) {
+      .nav-links {
+        gap: 0;
+      }
+
+      .nav-links a {
+        padding-inline: 7px;
+      }
+
+      .feature-grid,
+      .crew-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .header-inner {
+        flex-wrap: wrap;
+        gap: 8px 16px;
+        padding-block: 11px;
+      }
+
+      .nav-links {
+        order: 3;
+        width: 100%;
+        margin-inline: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .nav-links::-webkit-scrollbar {
+        display: none;
+      }
+
+      .header-actions {
+        margin-inline-start: auto;
+      }
+
+      .hero {
+        padding-block-start: 72px;
+      }
+
+      .customize-panel,
+      .docs-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy {
+        max-width: 730px;
+      }
+
+      .hero h1 {
+        font-size: clamp(4rem, 14vw, 7rem);
+      }
+
+      .docs-grid {
+        gap: 18px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .container {
+        width: min(calc(100% - 28px), var(--container));
+      }
+
+      .section {
+        padding-block: 78px;
+      }
+
+      .header-inner {
+        min-height: 68px;
+      }
+
+      .brand-mark {
+        width: 29px;
+        height: 29px;
+      }
+
+      .header-github {
+        width: 40px;
+        padding-inline: 0;
+      }
+
+      .header-github span {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .hero {
+        padding-block: 58px 46px;
+      }
+
+      .hero h1 {
+        font-size: clamp(3.5rem, 19vw, 5.4rem);
+      }
+
+      .hero-tagline {
+        font-size: 1.25rem;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .stat + .stat {
+        border-block-start: 1px solid var(--border);
+        border-inline-start: 0;
+      }
+
+      .feature-grid,
+      .crew-grid,
+      .controls-list {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card {
+        min-height: 0;
+      }
+
+      .feature-icon {
+        margin-block-end: 20px;
+      }
+
+      .customize-section {
+        padding-block: 78px;
+      }
+
+      .customize-panel {
+        padding: 25px 20px;
+      }
+
+      .default-stack {
+        grid-column: auto;
+      }
+
+      .workflow-row {
+        align-items: start;
+        gap: 6px;
+        grid-template-columns: 1fr;
+      }
+
+      .model-table th,
+      .model-table td {
+        padding: 13px;
+      }
+
+      .crew-card {
+        min-height: 160px;
+      }
+
+      .crew-card p {
+        margin-block-start: 23px;
+      }
+
+      .code-panel pre {
+        padding: 20px 18px;
+      }
+
+      .install-notes {
+        padding: 19px;
+      }
+
+      .footer-inner {
+        min-height: 150px;
+        padding-block: 28px;
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .brand {
+        font-size: 0.9rem;
+      }
+
+      .header-actions {
+        gap: 6px;
+      }
+
+      .language-toggle {
+        min-height: 37px;
+        padding-inline: 9px;
+      }
+
+      .header-github {
+        width: 37px;
+        min-height: 37px;
+      }
+
+      .nav-links a {
+        font-size: 0.78rem;
+      }
+
+      .hero-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .hero-copy > *,
+      .reveal-ready,
+      .reveal-ready.is-visible {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to content" data-fa="رفتن به محتوای اصلی">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#overview" aria-label="Claude Crew home" data-aria-en="Claude Crew home" data-aria-fa="صفحه اصلی Claude Crew">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.8c.8 5.6 4.6 9.4 10.2 10.2-5.6.8-9.4 4.6-10.2 10.2C11.2 16.6 7.4 12.8 1.8 12 7.4 11.2 11.2 7.4 12 1.8Z"/></svg>
+        </span>
+        <span>Claude Crew</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation" data-aria-en="Primary navigation" data-aria-fa="ناوبری اصلی">
+        <a href="#overview" data-en="Overview" data-fa="معرفی">Overview</a>
+        <a href="#docs" data-en="Docs" data-fa="سازوکار">Docs</a>
+        <a href="#install" data-en="Install" data-fa="نصب">Install</a>
+        <a href="#customize" data-en="Customize" data-fa="شخصی‌سازی">Customize</a>
+        <a href="#crew" data-en="Crew" data-fa="تیم">Crew</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="language-toggle" id="language-toggle" type="button" aria-pressed="false" aria-label="Switch to Persian" data-aria-en="Switch to Persian" data-aria-fa="تغییر زبان به انگلیسی">
+          <span class="language-option" data-language="en">EN</span>
+          <span aria-hidden="true">/</span>
+          <span class="language-option" data-language="fa">FA</span>
+        </button>
+        <a class="header-github" href="https://github.com/miladjs/claude-crew" target="_blank" rel="noreferrer" aria-label="Claude Crew on GitHub" data-aria-en="Claude Crew on GitHub" data-aria-fa="Claude Crew در GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .7A11.5 11.5 0 0 0 8.36 23.1c.58.1.79-.25.79-.56v-2.02c-3.22.7-3.9-1.37-3.9-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.17.08 1.78 1.2 1.78 1.2 1.04 1.77 2.72 1.26 3.38.96.1-.75.4-1.26.74-1.55-2.57-.3-5.28-1.29-5.28-5.7 0-1.26.45-2.3 1.2-3.1-.12-.3-.52-1.47.11-3.05 0 0 .97-.31 3.17 1.18a10.98 10.98 0 0 1 5.77 0c2.2-1.5 3.17-1.18 3.17-1.18.63 1.58.23 2.76.11 3.06.74.8 1.2 1.83 1.2 3.1 0 4.43-2.72 5.4-5.3 5.69.42.36.79 1.06.79 2.14v3.04c0 .31.2.67.8.56A11.5 11.5 0 0 0 12 .7Z"/></svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="overview" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <div class="eyebrow">
+              <span class="eyebrow-dot" aria-hidden="true"></span>
+              <span data-en="Built from real-world experience" data-fa="بر پایه تجربه واقعی">Built from real-world experience</span>
+            </div>
+            <h1 id="hero-title">Claude Crew</h1>
+            <p class="hero-tagline" data-en="A software engineering company inside Claude Code — one manager and twelve specialist agents." data-fa="یک شرکت مهندسی نرم‌افزار داخل Claude Code — یک مدیر و دوازده ایجنت تخصصی.">A software engineering company inside Claude Code — one manager and twelve specialist agents.</p>
+            <p class="hero-subtext" data-en="The manager plans, dispatches, and verifies. Specialists read, write, test, research, diagnose, and judge—with a hard boundary around every role." data-fa="مدیر برنامه‌ریزی، تقسیم کار و راستی‌آزمایی می‌کند. ایجنت‌های تخصصی می‌خوانند، می‌نویسند، تست می‌کنند، تحقیق می‌کنند، عیب را پیدا می‌کنند و درباره نتیجه قضاوت می‌کنند؛ با مرزی روشن برای هر نقش.">The manager plans, dispatches, and verifies. Specialists read, write, test, research, diagnose, and judge—with a hard boundary around every role.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#install">
+                <span data-en="Get started" data-fa="شروع نصب">Get started</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+              <a class="button button-secondary" href="https://github.com/miladjs/claude-crew" target="_blank" rel="noreferrer">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .7A11.5 11.5 0 0 0 8.36 23.1c.58.1.79-.25.79-.56v-2.02c-3.22.7-3.9-1.37-3.9-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.17.08 1.78 1.2 1.78 1.2 1.04 1.77 2.72 1.26 3.38.96.1-.75.4-1.26.74-1.55-2.57-.3-5.28-1.29-5.28-5.7 0-1.26.45-2.3 1.2-3.1-.12-.3-.52-1.47.11-3.05 0 0 .97-.31 3.17 1.18a10.98 10.98 0 0 1 5.77 0c2.2-1.5 3.17-1.18 3.17-1.18.63 1.58.23 2.76.11 3.06.74.8 1.2 1.83 1.2 3.1 0 4.43-2.72 5.4-5.3 5.69.42.36.79 1.06.79 2.14v3.04c0 .31.2.67.8.56A11.5 11.5 0 0 0 12 .7Z"/></svg>
+                <span data-en="View on GitHub" data-fa="مشاهده در GitHub">View on GitHub</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-stats" aria-label="Project highlights" data-aria-en="Project highlights" data-aria-fa="ویژگی‌های کلیدی پروژه">
+          <div class="stat">
+            <strong data-en="1 manager" data-fa="۱ مدیر">1 manager</strong>
+            <span data-en="plans and verifies" data-fa="برنامه‌ریزی و راستی‌آزمایی">plans and verifies</span>
+          </div>
+          <div class="stat">
+            <strong data-en="12 specialists" data-fa="۱۲ ایجنت تخصصی">12 specialists</strong>
+            <span data-en="with hard role boundaries" data-fa="با مرزهای دقیق نقش‌ها">with hard role boundaries</span>
+          </div>
+          <div class="stat">
+            <strong data-en="No build step" data-fa="بدون فرایند build">No build step</strong>
+            <span data-en="drop-in configuration" data-fa="کانفیگ آماده استفاده">drop-in configuration</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section overview" aria-labelledby="why-title">
+      <div class="container">
+        <span class="section-kicker" data-en="Why Claude Crew" data-fa="چرا Claude Crew">Why Claude Crew</span>
+        <h2 class="section-heading" id="why-title" data-en="Discipline where single-agent setups lose focus." data-fa="نظم و تمرکز، درست جایی که ساختار تک‌ایجنتی شکست می‌خورد.">Discipline where single-agent setups lose focus.</h2>
+        <p class="section-copy" data-en="Each capability has one owner, and the amount of process scales with the risk of the change." data-fa="هر قابلیت فقط یک صاحب دارد و مقدار فرایند متناسب با ریسک تغییر است.">Each capability has one owner, and the amount of process scales with the risk of the change.</p>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v5m0 0L6 11m6-3 6 3M6 11v5m12-5v5M3 16h6v5H3zm12 0h6v5h-6z"/></svg>
+            </div>
+            <h3 data-en="Hard role separation" data-fa="تفکیک سخت نقش‌ها">Hard role separation</h3>
+            <p data-en="Reading, writing, testing, diagnosis, and judgment each belong to a defined specialist." data-fa="خواندن، نوشتن، تست، عیب‌یابی و قضاوت هرکدام در اختیار یک ایجنت تخصصی مشخص است.">Reading, writing, testing, diagnosis, and judgment each belong to a defined specialist.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9m5 10V5m6 14v-7m5 7V3"/></svg>
+            </div>
+            <h3 data-en="Cost-tiered model assignment" data-fa="تخصیص مدل بر اساس هزینه">Cost-tiered model assignment</h3>
+            <p data-en="Four role aliases put orchestration, file work, analysis, and trivial edits on the right model tier." data-fa="چهار نام نقش، مدیریت، کار روی فایل، تحلیل و تغییر ساده را به سطح مدل مناسب می‌سپارند.">Four role aliases put orchestration, file work, analysis, and trivial edits on the right model tier.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h5M10 13h5m-5 4h5"/></svg>
+            </div>
+            <h3 data-en="Drop-in configuration" data-fa="کانفیگ آماده استفاده">Drop-in configuration</h3>
+            <p data-en="A stack-neutral rulebook, agent definitions, and one profile—with no fork, plugin, or build step." data-fa="یک فایل قوانین مستقل از استک، تعریف ایجنت‌ها و یک پروفایل؛ بدون fork، plugin یا build جداگانه.">A stack-neutral rulebook, agent definitions, and one profile—with no fork, plugin, or build step.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="7" r="3"/><path d="M5 21v-2a7 7 0 0 1 14 0v2M4 8a2.5 2.5 0 1 0 0 5m16-5a2.5 2.5 0 1 1 0 5"/></svg>
+            </div>
+            <h3 data-en="One manager + 12 specialists" data-fa="یک مدیر + ۱۲ ایجنت تخصصی">One manager + 12 specialists</h3>
+            <p data-en="The manager scopes, plans, delegates, and verifies while specialists execute within clear boundaries." data-fa="مدیر کار را می‌سنجد، برنامه می‌چیند، واگذار می‌کند و نتیجه را می‌سنجد؛ ایجنت‌ها نیز در مرز روشن خود اجرا می‌کنند.">The manager scopes, plans, delegates, and verifies while specialists execute within clear boundaries.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="customize-section" id="customize" aria-labelledby="customize-title">
+      <div class="container">
+        <div class="customize-panel">
+          <div class="customize-copy">
+            <span class="section-kicker" data-en="One-file customization" data-fa="شخصی‌سازی تک‌فایلی">One-file customization</span>
+            <h2 class="section-heading" id="customize-title" data-en="Customize the stack in one file." data-fa="استک را فقط در یک فایل شخصی‌سازی کنید.">Customize the stack in one file.</h2>
+            <p class="section-copy" data-en="This is the crew’s sole customization surface. Edit it to adapt Claude Crew to any project." data-fa="این فایل تنها محل شخصی‌سازی تیم است. برای سازگار کردن Claude Crew با هر پروژه فقط همین فایل را ویرایش کنید.">This is the crew’s sole customization surface. Edit it to adapt Claude Crew to any project.</p>
+            <code class="path-chip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h5"/></svg>
+              skills/stack-profile/SKILL.md
+            </code>
+            <p class="customize-note">
+              <strong data-en="Keep the core stack-neutral." data-fa="هسته را مستقل از استک نگه دارید.">Keep the core stack-neutral.</strong>
+              <span data-en=" CLAUDE.md and the agent definitions must not be edited to change stacks." data-fa=" برای تغییر استک، CLAUDE.md یا فایل‌های تعریف ایجنت را ویرایش نکنید."> CLAUDE.md and the agent definitions must not be edited to change stacks.</span>
+            </p>
+          </div>
+
+          <ul class="controls-list" aria-label="Stack profile controls" data-aria-en="Stack profile controls" data-aria-fa="موارد قابل تنظیم در پروفایل استک">
+            <li><span class="check-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 4 4L19 6"/></svg></span><span data-en="Response language and register" data-fa="زبان و لحن پاسخ">Response language and register</span></li>
+            <li><span class="check-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 4 4L19 6"/></svg></span><span data-en="Primary stack" data-fa="استک اصلی">Primary stack</span></li>
+            <li><span class="check-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 4 4L19 6"/></svg></span><span data-en="Secondary stacks" data-fa="استک‌های ثانویه">Secondary stacks</span></li>
+            <li><span class="check-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 4 4L19 6"/></svg></span><span data-en="UI conventions" data-fa="قواعد رابط کاربری">UI conventions</span></li>
+            <li><span class="check-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 4 4L19 6"/></svg></span><span data-en="High-risk areas" data-fa="بخش‌های پرریسک">High-risk areas</span></li>
+            <li><span class="check-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 4 4L19 6"/></svg></span><span data-en="Project rules" data-fa="قواعد پروژه">Project rules</span></li>
+            <li><span class="check-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 4 4L19 6"/></svg></span><span data-en="Test and type-check commands" data-fa="دستورهای تست و type-check">Test and type-check commands</span></li>
+            <li class="default-stack"><span class="check-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 4 4L19 6"/></svg></span><span><strong data-en="Bundled default: " data-fa="پروفایل پیش‌فرض: ">Bundled default: </strong><span class="latin">TypeScript / Next.js App Router / Express / Tailwind / Persian RTL</span></span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section docs-section" id="docs" aria-labelledby="docs-title">
+      <div class="container">
+        <span class="section-kicker" data-en="How it works" data-fa="سازوکار">How it works</span>
+        <h2 class="section-heading" id="docs-title" data-en="Process scales with risk. Models scale with responsibility." data-fa="فرایند متناسب با ریسک و مدل متناسب با مسئولیت انتخاب می‌شود.">Process scales with risk. Models scale with responsibility.</h2>
+        <p class="section-copy" data-en="The manager sizes each task, runs the matching chain, and assigns work through four cost-aware role aliases." data-fa="مدیر سطح هر کار را می‌سنجد، زنجیره مناسب را اجرا می‌کند و کار را از طریق چهار نام نقش مبتنی بر هزینه واگذار می‌کند.">The manager sizes each task, runs the matching chain, and assigns work through four cost-aware role aliases.</p>
+
+        <div class="docs-grid">
+          <article class="doc-panel" aria-labelledby="workflow-title">
+            <h3 class="doc-panel-heading" id="workflow-title"><span class="panel-dot" aria-hidden="true"></span><span data-en="Workflow chains" data-fa="زنجیره‌های گردش‌کار">Workflow chains</span></h3>
+            <ol class="workflow-list">
+              <li class="workflow-row"><span class="workflow-label mono">TRIVIAL</span><code class="workflow-chain" data-en="[explorer if location unknown] → fixer → reviewer → done" data-fa="[اگر مسیر نامعلوم بود explorer] → fixer → reviewer → پایان">[explorer if location unknown] → fixer → reviewer → done</code></li>
+              <li class="workflow-row"><span class="workflow-label mono">NORMAL</span><code class="workflow-chain" data-en="explorer → English plan → implementer → reviewer ∥ tester → done" data-fa="explorer → برنامه انگلیسی → implementer → reviewer ∥ tester → پایان">explorer → English plan → implementer → reviewer ∥ tester → done</code></li>
+              <li class="workflow-row"><span class="workflow-label mono">HIGH</span><code class="workflow-chain" data-en="explorer → guardian PRE → English plan → implementer → tester → reviewer → security* → guardian POST → done" data-fa="explorer → guardian PRE → برنامه انگلیسی → implementer → tester → reviewer → security* → guardian POST → پایان">explorer → guardian PRE → English plan → implementer → tester → reviewer → security* → guardian POST → done</code></li>
+              <li class="workflow-row"><span class="workflow-label mono">RESEARCH</span><code class="workflow-chain" data-en="researcher is inserted before the English plan whenever external facts are required" data-fa="هرجا اطلاعات بیرونی لازم باشد، researcher پیش از برنامه انگلیسی اضافه می‌شود">researcher is inserted before the English plan whenever external facts are required</code></li>
+            </ol>
+          </article>
+
+          <article class="doc-panel" aria-labelledby="models-title">
+            <h3 class="doc-panel-heading" id="models-title"><span class="panel-dot" aria-hidden="true"></span><span data-en="Model role aliases" data-fa="نام نقش‌های مدل">Model role aliases</span></h3>
+            <div class="table-scroll">
+              <table class="model-table">
+                <thead>
+                  <tr><th data-en="Alias" data-fa="نام نقش">Alias</th><th data-en="Used for" data-fa="کاربرد">Used for</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><span class="role-badge mono">lead</span><code class="model-id">claude-lead</code></td><td class="model-use" data-en="Management, review, security, and regression gates" data-fa="مدیریت، بازبینی، امنیت و درگاه رگرسیون">Management, review, security, and regression gates</td></tr>
+                  <tr><td><span class="role-badge mono">engineer</span><code class="model-id">claude-engineer</code></td><td class="model-use" data-en="Reconnaissance, implementation, tests, and prose" data-fa="شناسایی، پیاده‌سازی، تست و نگارش">Reconnaissance, implementation, tests, and prose</td></tr>
+                  <tr><td><span class="role-badge mono">analyst</span><code class="model-id">claude-analyst</code></td><td class="model-use" data-en="External research, root-cause analysis, and bug hunting" data-fa="تحقیق بیرونی، ریشه‌یابی و باگ‌یابی">External research, root-cause analysis, and bug hunting</td></tr>
+                  <tr><td><span class="role-badge mono">assistant</span><code class="model-id">claude-assistant</code></td><td class="model-use" data-en="Low-risk, single-file TRIVIAL edits" data-fa="تغییرات کم‌ریسک، تک‌فایلی و TRIVIAL">Low-risk, single-file TRIVIAL edits</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="crew" aria-labelledby="crew-title">
+      <div class="container">
+        <span class="section-kicker" data-en="The crew" data-fa="اعضای تیم">The crew</span>
+        <h2 class="section-heading" id="crew-title" data-en="Twelve specialists. One clear owner for every capability." data-fa="دوازده ایجنت تخصصی؛ یک مسئول روشن برای هر قابلیت.">Twelve specialists. One clear owner for every capability.</h2>
+        <p class="section-copy" data-en="Each agent stays inside a hard boundary, keeping execution focused and verification independent." data-fa="هر ایجنت داخل مرز مشخص خود می‌ماند تا اجرا متمرکز و راستی‌آزمایی مستقل باشد.">Each agent stays inside a hard boundary, keeping execution focused and verification independent.</p>
+
+        <div class="crew-grid">
+          <article class="crew-card" data-role="engineer"><div class="crew-card-top"><code class="agent-name">explorer</code><span class="role-badge mono">engineer</span></div><p data-en="Maps the codebase and returns a structured, read-only reconnaissance report." data-fa="کدبیس را می‌شناسد و گزارش ساختاریافته و فقط‌خواندنی می‌دهد.">Maps the codebase and returns a structured, read-only reconnaissance report.</p></article>
+          <article class="crew-card" data-role="engineer"><div class="crew-card-top"><code class="agent-name">backend</code><span class="role-badge mono">engineer</span></div><p data-en="Implements APIs, business logic, data access, authentication, and integrations." data-fa="API، منطق کسب‌وکار، دسترسی به داده، احراز هویت و integrationها را پیاده‌سازی می‌کند.">Implements APIs, business logic, data access, authentication, and integrations.</p></article>
+          <article class="crew-card" data-role="engineer"><div class="crew-card-top"><code class="agent-name">frontend</code><span class="role-badge mono">engineer</span></div><p data-en="Implements UI, components, styling, state, forms, and accessibility." data-fa="UI، component، styling، state، form و accessibility را پیاده‌سازی می‌کند.">Implements UI, components, styling, state, forms, and accessibility.</p></article>
+          <article class="crew-card" data-role="engineer"><div class="crew-card-top"><code class="agent-name">tester</code><span class="role-badge mono">engineer</span></div><p data-en="Writes and runs focused automated tests." data-fa="تست‌های خودکار و متمرکز را می‌نویسد و اجرا می‌کند.">Writes and runs focused automated tests.</p></article>
+          <article class="crew-card" data-role="engineer"><div class="crew-card-top"><code class="agent-name">writer</code><span class="role-badge mono">engineer</span></div><p data-en="Writes documentation, prose, and copy in the profile language." data-fa="مستندات، نثر و copy را به زبان تعیین‌شده در پروفایل می‌نویسد.">Writes documentation, prose, and copy in the profile language.</p></article>
+          <article class="crew-card" data-role="analyst"><div class="crew-card-top"><code class="agent-name">researcher</code><span class="role-badge mono">analyst</span></div><p data-en="Researches external documentation, APIs, errors, and version differences." data-fa="مستندات بیرونی، APIها، خطاها و تفاوت نسخه‌ها را بررسی می‌کند.">Researches external documentation, APIs, errors, and version differences.</p></article>
+          <article class="crew-card" data-role="analyst"><div class="crew-card-top"><code class="agent-name">debugger</code><span class="role-badge mono">analyst</span></div><p data-en="Performs deep root-cause analysis when the cause is not apparent." data-fa="وقتی علت واضح نیست، ریشه خطا را عمیق بررسی می‌کند.">Performs deep root-cause analysis when the cause is not apparent.</p></article>
+          <article class="crew-card" data-role="analyst"><div class="crew-card-top"><code class="agent-name">qa</code><span class="role-badge mono">analyst</span></div><p data-en="Hunts for unreported edge cases, race conditions, and broken failure paths." data-fa="edge case، race condition و مسیرهای شکست گزارش‌نشده را پیدا می‌کند.">Hunts for unreported edge cases, race conditions, and broken failure paths.</p></article>
+          <article class="crew-card" data-role="lead"><div class="crew-card-top"><code class="agent-name">reviewer</code><span class="role-badge mono">lead</span></div><p data-en="Reviews completed changes adversarially and reports defects." data-fa="تغییر کامل‌شده را سخت‌گیرانه بازبینی و عیب‌ها را گزارش می‌کند.">Reviews completed changes adversarially and reports defects.</p></article>
+          <article class="crew-card" data-role="lead"><div class="crew-card-top"><code class="agent-name">security</code><span class="role-badge mono">lead</span></div><p data-en="Audits trust boundaries, authorization, input, data exposure, and integrations." data-fa="مرزهای اعتماد، authorization، ورودی، افشای داده و integrationها را ممیزی می‌کند.">Audits trust boundaries, authorization, input, data exposure, and integrations.</p></article>
+          <article class="crew-card" data-role="lead"><div class="crew-card-top"><code class="agent-name">guardian</code><span class="role-badge mono">lead</span></div><p data-en="Records and checks regression baselines around HIGH-risk changes." data-fa="پیش و پس از تغییر پرریسک baseline رگرسیون را ثبت و بررسی می‌کند.">Records and checks regression baselines around HIGH-risk changes.</p></article>
+          <article class="crew-card" data-role="assistant"><div class="crew-card-top"><code class="agent-name">fixer</code><span class="role-badge mono">assistant</span></div><p data-en="Applies a few obvious, low-risk lines in one file for TRIVIAL work." data-fa="برای کار TRIVIAL فقط چند خط واضح و کم‌ریسک را در یک فایل تغییر می‌دهد.">Applies a few obvious, low-risk lines in one file for TRIVIAL work.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section install-section" id="install" aria-labelledby="install-title">
+      <div class="container">
+        <span class="section-kicker" data-en="Quick start" data-fa="نصب سریع">Quick start</span>
+        <h2 class="section-heading" id="install-title" data-en="Install the complete crew in minutes." data-fa="تیم کامل را در چند دقیقه نصب کنید.">Install the complete crew in minutes.</h2>
+        <p class="section-copy" data-en="Choose your operating system. Each installation copies the manager rules, all twelve agents, the stack profile, and the gateway settings template." data-fa="سیستم‌عامل را انتخاب کنید. هر روش فایل قوانین مدیر، هر دوازده ایجنت، پروفایل استک و نمونه تنظیمات گیت‌وی را کپی می‌کند.">Choose your operating system. Each installation copies the manager rules, all twelve agents, the stack profile, and the gateway settings template.</p>
+
+        <div class="install-shell">
+          <div class="tabs" role="tablist" aria-label="Operating system" data-aria-en="Operating system" data-aria-fa="سیستم‌عامل">
+            <button class="tab-button" id="tab-macos" type="button" role="tab" aria-selected="true" aria-controls="panel-macos" tabindex="0" data-target="macos">macOS</button>
+            <button class="tab-button" id="tab-windows" type="button" role="tab" aria-selected="false" aria-controls="panel-windows" tabindex="-1" data-target="windows">Windows</button>
+            <button class="tab-button" id="tab-linux" type="button" role="tab" aria-selected="false" aria-controls="panel-linux" tabindex="-1" data-target="linux">Linux</button>
+          </div>
+
+          <div class="code-panel" id="panel-macos" role="tabpanel" aria-labelledby="tab-macos" data-panel="macos">
+            <div class="code-toolbar"><div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div><button class="copy-button" type="button" data-copy="code-macos" data-en="Copy" data-fa="کپی" aria-label="Copy macOS install commands" data-aria-en="Copy macOS install commands" data-aria-fa="کپی دستورهای نصب macOS">Copy</button></div>
+            <pre id="code-macos"><code>git clone https://github.com/miladjs/claude-crew.git
+cd claude-crew
+mkdir -p ~/.claude
+cp CLAUDE.md ~/.claude/CLAUDE.md
+cp -r agents ~/.claude/
+cp -r skills ~/.claude/
+cp settings.example.json ~/.claude/settings.json</code></pre>
+          </div>
+
+          <div class="code-panel" id="panel-windows" role="tabpanel" aria-labelledby="tab-windows" data-panel="windows" hidden>
+            <div class="code-toolbar"><div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div><button class="copy-button" type="button" data-copy="code-windows" data-en="Copy" data-fa="کپی" aria-label="Copy Windows install commands" data-aria-en="Copy Windows install commands" data-aria-fa="کپی دستورهای نصب Windows">Copy</button></div>
+            <pre id="code-windows"><code>git clone https://github.com/miladjs/claude-crew.git
+cd claude-crew
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude" | Out-Null
+Copy-Item CLAUDE.md "$env:USERPROFILE\.claude\CLAUDE.md"
+Copy-Item -Recurse -Force agents "$env:USERPROFILE\.claude\agents"
+Copy-Item -Recurse -Force skills "$env:USERPROFILE\.claude\skills"
+Copy-Item settings.example.json "$env:USERPROFILE\.claude\settings.json"</code></pre>
+          </div>
+
+          <div class="code-panel" id="panel-linux" role="tabpanel" aria-labelledby="tab-linux" data-panel="linux" hidden>
+            <div class="code-toolbar"><div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div><button class="copy-button" type="button" data-copy="code-linux" data-en="Copy" data-fa="کپی" aria-label="Copy Linux install commands" data-aria-en="Copy Linux install commands" data-aria-fa="کپی دستورهای نصب Linux">Copy</button></div>
+            <pre id="code-linux"><code>git clone https://github.com/miladjs/claude-crew.git
+cd claude-crew
+mkdir -p ~/.claude
+cp CLAUDE.md ~/.claude/CLAUDE.md
+cp -r agents ~/.claude/
+cp -r skills ~/.claude/
+cp settings.example.json ~/.claude/settings.json</code></pre>
+          </div>
+
+          <ul class="install-notes">
+            <li><span class="note-mark" aria-hidden="true"></span><span><span data-en="Open the copied settings file, set " data-fa="فایل تنظیمات کپی‌شده را باز کنید، ">Open the copied settings file, set </span><code class="inline-code">ANTHROPIC_BASE_URL</code><span data-en=" and " data-fa=" و "> and </span><code class="inline-code">ANTHROPIC_AUTH_TOKEN</code><span data-en=", then restart Claude Code." data-fa=" را مقدار دهید و سپس Claude Code را restart کنید.">, then restart Claude Code.</span></span></li>
+            <li><span class="note-mark" aria-hidden="true"></span><span><span data-en="To change the stack, edit only " data-fa="برای تغییر استک فقط فایل ">To change the stack, edit only </span><code class="inline-code">skills/stack-profile/SKILL.md</code><span data-en="." data-fa=" را ویرایش کنید.">.</span></span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-credit"><span data-en="Built by " data-fa="ساخته‌شده توسط ">Built by </span><a href="https://miladjs.com" target="_blank" rel="noreferrer">Milad Roknadini</a></div>
+      <div class="footer-links">
+        <span data-en="MIT License" data-fa="مجوز MIT">MIT License</span>
+        <a href="https://github.com/miladjs/claude-crew" target="_blank" rel="noreferrer">GitHub</a>
+        <span data-en="© 2026 Milad Roknadini" data-fa="© ۲۰۲۶ Milad Roknadini">© 2026 Milad Roknadini</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const languageToggle = document.getElementById('language-toggle');
+      const translatableElements = document.querySelectorAll('[data-en][data-fa]');
+      const ariaElements = document.querySelectorAll('[data-aria-en][data-aria-fa]');
+      const altElements = document.querySelectorAll('[data-alt-en][data-alt-fa]');
+      const metaDescription = document.querySelector('meta[name="description"]');
+      const pageCopy = {
+        en: {
+          title: 'Claude Crew — a software engineering company inside Claude Code',
+          description: 'A drop-in Claude Code config turns one session into a disciplined team: one manager, twelve specialist agents, hard role separation, and cost-tiered models.'
+        },
+        fa: {
+          title: 'Claude Crew — یک شرکت مهندسی نرم‌افزار داخل Claude Code',
+          description: 'Claude Crew یک جلسه Claude Code را با یک مدیر و دوازده ایجنت تخصصی به تیمی منظم تبدیل می‌کند.'
+        }
+      };
+
+      function applyLanguage(language) {
+        const isPersian = language === 'fa';
+        root.lang = language;
+        root.dir = isPersian ? 'rtl' : 'ltr';
+        languageToggle.setAttribute('aria-pressed', String(isPersian));
+
+        translatableElements.forEach((element) => {
+          element.textContent = element.dataset[language];
+        });
+
+        ariaElements.forEach((element) => {
+          element.setAttribute('aria-label', element.dataset[`aria${language === 'en' ? 'En' : 'Fa'}`]);
+        });
+
+        altElements.forEach((element) => {
+          element.alt = element.dataset[`alt${language === 'en' ? 'En' : 'Fa'}`];
+        });
+
+        document.title = pageCopy[language].title;
+        metaDescription.content = pageCopy[language].description;
+
+        try {
+          localStorage.setItem('claude-crew-language', language);
+        } catch (_) {
+          // Language persistence is optional when storage is unavailable.
+        }
+      }
+
+      let savedLanguage = 'en';
+      try {
+        const storedLanguage = localStorage.getItem('claude-crew-language');
+        if (storedLanguage === 'fa' || storedLanguage === 'en') savedLanguage = storedLanguage;
+      } catch (_) {
+        // Keep English as the default when storage is unavailable.
+      }
+      applyLanguage(savedLanguage);
+
+      languageToggle.addEventListener('click', () => {
+        applyLanguage(root.lang === 'fa' ? 'en' : 'fa');
+      });
+
+      const revealElements = document.querySelectorAll(
+        '.overview .container, .customize-panel, .docs-section .container, #crew .container, .install-section .container'
+      );
+
+      if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          });
+        }, { threshold: 0.12 });
+
+        revealElements.forEach((element) => {
+          element.classList.add('reveal-ready');
+          revealObserver.observe(element);
+        });
+      }
+
+      const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+      const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+      function selectTab(tab) {
+        tabs.forEach((item) => {
+          const selected = item === tab;
+          item.setAttribute('aria-selected', String(selected));
+          item.tabIndex = selected ? 0 : -1;
+        });
+        panels.forEach((panel) => {
+          panel.hidden = panel.dataset.panel !== tab.dataset.target;
+        });
+      }
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => selectTab(tab));
+        tab.addEventListener('keydown', (event) => {
+          if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+          event.preventDefault();
+          let nextIndex = index;
+          if (event.key === 'Home') nextIndex = 0;
+          if (event.key === 'End') nextIndex = tabs.length - 1;
+          if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+          if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
+          selectTab(tabs[nextIndex]);
+          tabs[nextIndex].focus();
+        });
+      });
+
+      async function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.setAttribute('readonly', '');
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        textArea.remove();
+      }
+
+      document.querySelectorAll('.copy-button').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const code = document.getElementById(button.dataset.copy);
+          if (!code) return;
+          try {
+            await copyText(code.textContent);
+            button.textContent = root.lang === 'fa' ? 'کپی شد' : 'Copied';
+            window.clearTimeout(button.copyResetTimer);
+            button.copyResetTimer = window.setTimeout(() => {
+              button.textContent = button.dataset[root.lang];
+            }, 1600);
+          } catch (_) {
+            button.textContent = root.lang === 'fa' ? 'ناموفق' : 'Failed';
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

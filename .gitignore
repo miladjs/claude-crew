@@ -1,0 +1,9 @@
+# هرگز فایل تنظیماتِ واقعی (شاملِ توکن و کلید API) کامیت نشود
+settings.json
+settings.local.json
+config.json
+.credentials.json
+*.token
+
+# macOS
+.DS_Store
