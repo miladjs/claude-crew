@@ -139,11 +139,12 @@ RESEARCH  researcher is inserted before the English plan whenever external facts
 Choose your operating system. Each installation copies the manager rules, all twelve agents, the stack profile under `skills`, and the gateway settings template.
 
 <details open>
-<summary><b>macOS</b></summary>
+<summary><b>macOS & Linux</b></summary>
 
-In Terminal, run:
+In a terminal, run:
 
 ```bash
+cd "$(mktemp -d)"
 git clone https://github.com/miladjs/claude-crew.git
 cd claude-crew
 mkdir -p ~/.claude
@@ -165,6 +166,7 @@ If you set gateway variables with `export` instead, they apply only to terminals
 In PowerShell, run:
 
 ```powershell
+cd $env:TEMP
 git clone https://github.com/miladjs/claude-crew.git
 cd claude-crew
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude" | Out-Null
@@ -175,25 +177,6 @@ Copy-Item settings.example.json "$env:USERPROFILE\.claude\settings.json"
 ```
 
 Open `%USERPROFILE%\.claude\settings.json`, set `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN`, then restart Claude Code. To change the default stack, edit only `%USERPROFILE%\.claude\skills\stack-profile\SKILL.md`.
-
-</details>
-
-<details>
-<summary><b>Linux</b></summary>
-
-In a terminal, run:
-
-```bash
-git clone https://github.com/miladjs/claude-crew.git
-cd claude-crew
-mkdir -p ~/.claude
-cp CLAUDE.md ~/.claude/CLAUDE.md
-cp -r agents ~/.claude/
-cp -r skills ~/.claude/
-cp settings.example.json ~/.claude/settings.json
-```
-
-Open `~/.claude/settings.json`, set `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN`, then restart Claude Code. To change the default stack, edit only `~/.claude/skills/stack-profile/SKILL.md`.
 
 </details>
 

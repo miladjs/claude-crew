@@ -139,11 +139,12 @@ RESEARCH  هرجا اطلاعات بیرونی لازم باشد، researcher پ
 سیستم‌عامل را انتخاب کنید. هر روش فایل قوانین مدیر، هر دوازده ایجنت، پروفایل استک داخل `skills` و نمونه تنظیمات گیت‌وی را کپی می‌کند.
 
 <details open>
-<summary><b>macOS</b></summary>
+<summary><b>macOS & Linux</b></summary>
 
-در Terminal اجرا کنید:
+در ترمینال اجرا کنید:
 
 ```bash
+cd "$(mktemp -d)"
 git clone https://github.com/miladjs/claude-crew.git
 cd claude-crew
 mkdir -p ~/.claude
@@ -165,6 +166,7 @@ cp settings.example.json ~/.claude/settings.json
 در PowerShell اجرا کنید:
 
 ```powershell
+cd $env:TEMP
 git clone https://github.com/miladjs/claude-crew.git
 cd claude-crew
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude" | Out-Null
@@ -175,25 +177,6 @@ Copy-Item settings.example.json "$env:USERPROFILE\.claude\settings.json"
 ```
 
 فایل `%USERPROFILE%\.claude\settings.json` را باز کنید، `ANTHROPIC_BASE_URL` و `ANTHROPIC_AUTH_TOKEN` را مقدار دهید و Claude Code را restart کنید. برای تغییر استک پیش‌فرض فقط `%USERPROFILE%\.claude\skills\stack-profile\SKILL.md` را ویرایش کنید.
-
-</details>
-
-<details>
-<summary><b>Linux</b></summary>
-
-در terminal اجرا کنید:
-
-```bash
-git clone https://github.com/miladjs/claude-crew.git
-cd claude-crew
-mkdir -p ~/.claude
-cp CLAUDE.md ~/.claude/CLAUDE.md
-cp -r agents ~/.claude/
-cp -r skills ~/.claude/
-cp settings.example.json ~/.claude/settings.json
-```
-
-فایل `~/.claude/settings.json` را باز کنید، `ANTHROPIC_BASE_URL` و `ANTHROPIC_AUTH_TOKEN` را مقدار دهید و Claude Code را restart کنید. برای تغییر استک پیش‌فرض فقط `~/.claude/skills/stack-profile/SKILL.md` را ویرایش کنید.
 
 </details>
 
